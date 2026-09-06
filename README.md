@@ -36,6 +36,7 @@ durov-agents label validate data/labeling/gold/seed.jsonl
 - [Юрист-фильтр](docs/LEGAL_GATE.md)
 - [Разметка](docs/LABELING.md)
 - [Claude-организация](docs/CLAUDE_ORG.md)
+- [План: сделано и дальше](docs/ROADMAP.md)
 
 База знаний (private): [vault_backups](https://github.com/DUROV-OS/vault_backups). Те же правила для Claude Team лежат там в `00_Agent/`.
 
