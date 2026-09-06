@@ -3,7 +3,7 @@ from __future__ import annotations
 import uuid
 
 from durov_agents.ids import AgentId, RU_LABELS
-from durov_agents.runtime.context import DEFAULT_STORE, ContextStore
+from durov_agents.runtime.context import DEFAULT_STORE, ContextStore, default_store
 from durov_agents.runtime.legal_gate import scan
 from durov_agents.runtime.router import route
 from durov_agents.runtime.specialists import speak
@@ -17,7 +17,7 @@ def run_task(text: str, store: ContextStore | None = None) -> RunResult:
 
     legal = scan(text)
     planned = route(text, legal)
-    context = (store or DEFAULT_STORE).gather(text, planned.specialists)
+    context = (store or default_store()).gather(text, planned.specialists)
 
     opinions: list[Opinion] = []
     if legal.verdict == LegalVerdict.BLOCK:

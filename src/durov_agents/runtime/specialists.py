@@ -4,6 +4,7 @@ This is the MVP contract, not a chat persona. A model call may later fill
 the stance text; it may not invent citations that are not in SharedContext.
 """
 
+from durov_agents.adapters.vault import ALWAYS_PATHS
 from durov_agents.ids import AgentId, RU_LABELS
 from durov_agents.passport import get_passport
 from durov_agents.runtime.legal_gate import lawyer_reply
@@ -21,15 +22,17 @@ def speak(agent_id: AgentId, text: str, context: SharedContext, legal: LegalDeci
         )
 
     passport = get_passport(agent_id)
-    relevant = [hit for hit in context.hits if _useful(agent_id, hit.source, hit.path)]
-    citations = [hit.title for hit in relevant[:3]]
+    relevant = _rank_hits(agent_id, context)
+    citations = [f"{hit.title} ({hit.path})" if hit.path else hit.title for hit in relevant[:3]]
     if not citations:
         citations = ["общий контекст компании не дал профильного факта"]
 
+    excerpts = [hit.excerpt for hit in relevant[:2] if hit.excerpt]
     stance = (
         f"{RU_LABELS[agent_id].capitalize()} ({passport.purpose.split('.')[0]}). "
         f"По запросу «{_clip(text)}» опираюсь на: {'; '.join(citations)}. "
-        f"Не моё: {passport.does_not_own[0]}."
+        + (f"{excerpts[0]} " if excerpts else "")
+        + f"Не моё: {passport.does_not_own[0]}."
     )
     return Opinion(
         agent=agent_id,
@@ -40,6 +43,19 @@ def speak(agent_id: AgentId, text: str, context: SharedContext, legal: LegalDeci
     )
 
 
+def _rank_hits(agent_id: AgentId, context: SharedContext) -> list:
+    profile = [hit for hit in context.hits if _profile_hit(agent_id, hit.source, hit.path)]
+    always = [hit for hit in context.hits if hit.path in ALWAYS_PATHS and hit not in profile]
+    other = [hit for hit in context.hits if _useful(agent_id, hit.source, hit.path) and hit not in profile and hit not in always]
+    return profile + other + always
+
+
+def _profile_hit(agent_id: AgentId, source: str, path: str | None) -> bool:
+    return bool(path) and source == "vault" and path not in ALWAYS_PATHS and any(
+        path.startswith(prefix) for prefix in get_passport(agent_id).vault_paths
+    )
+
+
 def _useful(agent_id: AgentId, source: str, path: str | None) -> bool:
     if source == "crm" and agent_id in {AgentId.SALES, AgentId.MARKETER, AgentId.FINANCE}:
         return True
@@ -47,6 +63,8 @@ def _useful(agent_id: AgentId, source: str, path: str | None) -> bool:
         return True
     if not path:
         return False
+    if path in ALWAYS_PATHS or path.startswith("02_Business/00_Decision_Log/"):
+        return True
     return any(path.startswith(prefix) for prefix in get_passport(agent_id).vault_paths)
 
 
