@@ -1,0 +1,110 @@
+{
+  "agents": [
+    {
+      "id": "coordinator",
+      "label": "координатор"
+    },
+    {
+      "id": "sales",
+      "label": "продажник"
+    },
+    {
+      "id": "marketer",
+      "label": "маркетолог"
+    },
+    {
+      "id": "production",
+      "label": "производственник"
+    },
+    {
+      "id": "warehouse",
+      "label": "кладовщик"
+    },
+    {
+      "id": "finance",
+      "label": "финансист"
+    },
+    {
+      "id": "lawyer",
+      "label": "юрист"
+    },
+    {
+      "id": "engineer",
+      "label": "инженер"
+    }
+  ],
+  "legal_verdict": [
+    {
+      "id": "allow",
+      "label": "можно"
+    },
+    {
+      "id": "allow_with_conditions",
+      "label": "можно с оговоркой"
+    },
+    {
+      "id": "escalate_human",
+      "label": "к человеку"
+    },
+    {
+      "id": "block",
+      "label": "блок"
+    }
+  ],
+  "legal_category": [
+    {
+      "id": "none",
+      "label": "нет риска"
+    },
+    {
+      "id": "competitor_intel_illegal",
+      "label": "конкурентная разведка (ворованное)"
+    },
+    {
+      "id": "pricing_authority",
+      "label": "цена/скидка вне полномочий"
+    },
+    {
+      "id": "contract",
+      "label": "договор"
+    },
+    {
+      "id": "owner_promise",
+      "label": "обещание от имени владельца"
+    },
+    {
+      "id": "safety_code",
+      "label": "безопасность/нормы (СП/ГОСТ)"
+    },
+    {
+      "id": "personal_data",
+      "label": "персональные данные"
+    },
+    {
+      "id": "labor",
+      "label": "трудовое право"
+    },
+    {
+      "id": "intellectual_property",
+      "label": "интеллектуальная собственность"
+    }
+  ],
+  "action": [
+    {
+      "id": "read",
+      "label": "прочитать / ответить"
+    },
+    {
+      "id": "draft",
+      "label": "черновик"
+    },
+    {
+      "id": "act",
+      "label": "действие в системе"
+    },
+    {
+      "id": "escalate",
+      "label": "эскалация"
+    }
+  ]
+}

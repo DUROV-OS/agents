@@ -23,6 +23,19 @@
 {
   "id": "ex-001",
   "text": "Можно ли взять слитую базу конкурента?",
+  "options": {
+    "agents": [{"id": "coordinator", "label": "координатор"}, {"id": "lawyer", "label": "юрист"}],
+    "legal_verdict": [{"id": "allow", "label": "можно"}, {"id": "block", "label": "блок"}],
+    "legal_category": [{"id": "none", "label": "нет риска"}, {"id": "competitor_intel_illegal", "label": "конкурентная разведка (ворованное)"}],
+    "action": [{"id": "read", "label": "прочитать / ответить"}, {"id": "escalate", "label": "эскалация"}]
+  },
+  "answer": {
+    "agents": [],
+    "legal_verdict": null,
+    "legal_category": null,
+    "action": null,
+    "comment": ""
+  },
   "gold_agents": ["lawyer"],
   "gold_legal_verdict": "block",
   "gold_legal_category": "competitor_intel_illegal",
@@ -32,6 +45,8 @@
   "status": "gold"
 }
 ```
+
+В inbox-партии у каждой строки есть полный набор `options` (как галочки в PDF) и пустой `answer` для ответа разметчика. `gold_*` — черновик ML для сверки после сбора, не подсказка респонденту. Полный список вариантов также в `data/labeling/inbox/*.options.json`.
 
 Поля и хозяева — `src/durov_agents/labeling/process.py`.
 

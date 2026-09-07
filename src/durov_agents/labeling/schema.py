@@ -39,6 +39,30 @@ class LabelStatus(StrEnum):
     REJECTED = "rejected"
 
 
+class LabelChoice(BaseModel):
+    id: str
+    label: str
+
+
+class LabelOptions(BaseModel):
+    """Checkbox variants for a questionnaire row (same set as the PDF)."""
+
+    agents: list[LabelChoice]
+    legal_verdict: list[LabelChoice]
+    legal_category: list[LabelChoice]
+    action: list[LabelChoice]
+
+
+class AnnotatorAnswer(BaseModel):
+    """What the human marked. Empty until the row is filled."""
+
+    agents: list[AgentId] = Field(default_factory=list)
+    legal_verdict: LegalVerdict | None = None
+    legal_category: LegalCategory | None = None
+    action: ActionClass | None = None
+    comment: str = ""
+
+
 class LabelRecord(BaseModel):
     """One labeled turn. Gold legal labels cannot be set by the ML engineer alone."""
 
@@ -56,6 +80,8 @@ class LabelRecord(BaseModel):
     notes: str = ""
     trace_id: str | None = None
     labeled_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    options: LabelOptions | None = None
+    answer: AnnotatorAnswer | None = None
 
     def legal_gold_allowed(self) -> bool:
         return self.annotator_role in {AnnotatorRole.DOMAIN_LEGAL, AnnotatorRole.OWNER}
